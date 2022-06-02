@@ -1,0 +1,5 @@
+﻿/Dockerfile
+/.dockerignore
+/obj/
+/bin/
+/config.json
