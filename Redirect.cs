@@ -42,9 +42,13 @@ public class Redirect
             var url = (string)dictionary[shortUrl];
             return url;
         }
-        catch (KeyNotFoundException e)
+        catch (KeyNotFoundException)
         {
             return "KeyNotFound";
+        }
+        catch
+        {
+            return "ServerError";
         }
     }
 
@@ -54,7 +58,7 @@ public class Redirect
         string letters = "abcdefghijklmnopqrstuvwxyz";
         var chars = new char[8];
         var random = new Random();
-        var finalChars = $"{letters}{letters.ToUpper()}{numbers}";
+        var finalChars = $"{letters.ToLower()}{letters.ToUpper()}{numbers}";
         
         for (int i = 0; i < chars.Length; i++)
         {
