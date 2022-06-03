@@ -1,29 +1,30 @@
 using RedirectAPI;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+internal static class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    private static WebApplicationBuilder? _builder;
+    public static WebApplication? App;
+    private static void Main(string[] args)
+    {
+        _builder = WebApplication.CreateBuilder(args);
+
+        _builder.Services.AddControllers();
+        _builder.Services.AddEndpointsApiExplorer();
+        _builder.Services.AddSwaggerGen();
+
+        App = _builder.Build();
+
+        if (App.Environment.IsDevelopment())
+        {
+            App.UseSwagger();
+            App.UseSwaggerUI();
+        }
+        // Redirect.IsDev = App.Environment.IsDevelopment();
+
+        // app.UseHttpsRedirection();
+        // app.UseAuthorization();
+        App.MapControllers();
+
+        App.Run();
+    }
 }
-Redirect.IsDev = app.Environment.IsDevelopment();
-Console.WriteLine();
-
-// app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

@@ -4,58 +4,60 @@ namespace RedirectAPI;
 
 public class Redirect
 {
-    public static bool IsDev { get; set; }
-    private const string FileName = "config.json";
-    private static readonly string PathToDataJson = IsDev? $"A:\\RiderProjects\\RedirectAPI\\RedirectAPI\\{FileName}" : $"./{FileName}";
+    private static readonly bool IsDev = Program.App!.Environment.IsDevelopment();
+    private const string UrlsJsonFileName = "config.json";
+    private static readonly string PathToDataJson = IsDev? $@"A:\RiderProjects\RedirectAPI\RedirectAPI\{UrlsJsonFileName}" : $"./{UrlsJsonFileName}";
+    private static Dictionary<string, object>? _shortsUrl = LoadShortsJson().Result;
 
+    // Загрузка словаря в формате: ключ - короткая ссылка, полученное значение по ключу - длинная ссылка
     private static async Task<Dictionary<string,object>?> LoadShortsJson()
     {
         if (!File.Exists(PathToDataJson))
         {
             await Task.Run(() =>
             {
-                File.WriteAllText(PathToDataJson, "{\n}");
+                File.WriteAllText(PathToDataJson, "{}");
             });
         }
 
         var json = await File.ReadAllTextAsync(PathToDataJson);
         var responseJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
         return responseJson;
-        
     }
+    
+    // Обновление json словаря с ссылками
     private static void UpdateShortsJson(Dictionary<string, object> dict)
     {
-        var entries = dict.Select(d =>
-            $"\"{d.Key}\": \"{string.Join(",", d.Value)}\"");
-        
-        string newData = "{\n\t" + string.Join(",\n\t", entries) + "\n}";
-        File.WriteAllText(PathToDataJson, newData);
-        // Console.WriteLine("UpdateDataJson");
+        File.WriteAllText(PathToDataJson, JsonConvert.SerializeObject(dict));
     }
 
+    // Получение длинной ссылки из короткой
     public static string GetUrl(string shortUrl)
     {
-        var dictionary = LoadShortsJson().Result;
-        if (dictionary == null) return "null";
+        // var dictionary = _shortsUrl;
+        if (_shortsUrl == null) return "null";
         try
         {
-            var url = (string)dictionary[shortUrl];
+            var url = (string)_shortsUrl[shortUrl];
             return url;
         }
         catch (KeyNotFoundException)
         {
             return "KeyNotFound";
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             return "ServerError";
         }
     }
 
-    public static string SetNewUrl(string longUrl)
+    // Добавление новой длинный ссылки в словарь
+    // (генерируется новая короткая ссылка, которая используется в виде ключа в словаре к длинной ссылке)
+    public static string AddUrl(string longUrl)
     {
-        string numbers = "1234567890";
-        string letters = "abcdefghijklmnopqrstuvwxyz";
+        const string numbers = "1234567890";
+        const string letters = "abcdefghijklmnopqrstuvwxyz";
         var chars = new char[8];
         var random = new Random();
         var finalChars = $"{letters.ToLower()}{letters.ToUpper()}{numbers}";
@@ -65,13 +67,14 @@ public class Redirect
             chars[i] = finalChars[random.Next(finalChars.Length)];
         }
 
-        if (GetUrl(new string(chars)) != "KeyNotFound") return SetNewUrl(longUrl);
-        var shorts = LoadShortsJson().Result;
-        if (shorts == null) return "ServerError";
-        shorts[new string(chars)] = longUrl;
-        UpdateShortsJson(shorts);
+        var shortUrl = new string(chars);
+        if (_shortsUrl == null) return "ServerError";
+        if (GetUrl(shortUrl) != "KeyNotFound") return AddUrl(longUrl);
+        // var shorts = _shortsUrl;
+        _shortsUrl[shortUrl] = longUrl;
+        UpdateShortsJson(_shortsUrl);
 
-        return new string(chars);
+        return shortUrl;
     }
 
 }

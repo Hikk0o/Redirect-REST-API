@@ -6,15 +6,17 @@ namespace RedirectAPI.Controllers;
 [Route("api/[controller]")]
 public class RedirectController : ControllerBase
 {
+    // Get для получения длинной ссылки из короткой
     [HttpGet(Name = "GetUrlFromShort")]
     public string Get(string r)
     {
         return RedirectAPI.Redirect.GetUrl(r);
     }
     
-    [HttpPost(Name = "SetUrlFromShort")]
+    // Post для добавления новой длинной ссылки, вернет короткую
+    [HttpPost(Name = "AddUrlFromShort")]
     public string Post(string r)
     {
-        return RedirectAPI.Redirect.SetNewUrl(r);
+        return RedirectAPI.Redirect.AddUrl(r);
     }
 }
