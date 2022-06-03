@@ -2,12 +2,12 @@
 
 namespace RedirectAPI;
 
-public class Redirect
+public static class Redirect
 {
     private static readonly bool IsDev = Program.App!.Environment.IsDevelopment();
-    private const string UrlsJsonFileName = "config.json";
+    private const string UrlsJsonFileName = "redirects.json";
     private static readonly string PathToDataJson = IsDev? $@"A:\RiderProjects\RedirectAPI\RedirectAPI\{UrlsJsonFileName}" : $"./{UrlsJsonFileName}";
-    private static Dictionary<string, object>? _shortsUrl = LoadShortsJson().Result;
+    private static Dictionary<string, object>? _shortsUrl;
 
     // Загрузка словаря в формате: ключ - короткая ссылка, полученное значение по ключу - длинная ссылка
     private static async Task<Dictionary<string,object>?> LoadShortsJson()
@@ -34,6 +34,7 @@ public class Redirect
     // Получение длинной ссылки из короткой
     public static string GetUrl(string shortUrl)
     {
+        _shortsUrl = LoadShortsJson().Result;
         // var dictionary = _shortsUrl;
         if (_shortsUrl == null) return "null";
         try
@@ -56,6 +57,7 @@ public class Redirect
     // (генерируется новая короткая ссылка, которая используется в виде ключа в словаре к длинной ссылке)
     public static string AddUrl(string longUrl)
     {
+        if (!IsUrl(longUrl)) return "WrongUrl";
         const string numbers = "1234567890";
         const string letters = "abcdefghijklmnopqrstuvwxyz";
         var chars = new char[8];
@@ -68,6 +70,7 @@ public class Redirect
         }
 
         var shortUrl = new string(chars);
+        _shortsUrl = LoadShortsJson().Result;
         if (_shortsUrl == null) return "ServerError";
         if (GetUrl(shortUrl) != "KeyNotFound") return AddUrl(longUrl);
         // var shorts = _shortsUrl;
@@ -75,6 +78,11 @@ public class Redirect
         UpdateShortsJson(_shortsUrl);
 
         return shortUrl;
+    }
+
+    private static bool IsUrl(string url)
+    {
+        return Uri.IsWellFormedUriString(url, UriKind.Absolute);
     }
 
 }
