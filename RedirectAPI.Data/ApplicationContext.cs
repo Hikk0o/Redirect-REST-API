@@ -1,17 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RedirectAPI.Data;
 
 public class ApplicationContext : DbContext
 {
     
-    public ApplicationContext(DbContextOptions options)
-        : base(options)
-    {
-        // Console.WriteLine(options.BuildOptionsFragment());
-    }
+    public ApplicationContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
