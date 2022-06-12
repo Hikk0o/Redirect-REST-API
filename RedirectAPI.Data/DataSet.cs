@@ -1,8 +1,4 @@
-﻿
-
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RedirectAPI.Data;
 
@@ -17,7 +13,6 @@ namespace RedirectAPI.Data;
         return $"{Id}: {Ip}\n";
     }
 }
-
 
 [Table("links")] public class Link
 {

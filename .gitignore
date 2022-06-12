@@ -2,6 +2,7 @@
 /RedirectAPI/.dockerignore
 /RedirectAPI/obj/
 /RedirectAPI/bin/
+/RedirectAPI/DbSettings.json
 /RedirectAPI/config.json
 /RedirectAPI/redirects.json
 /RedirectAPI/appsettings.json

@@ -5,33 +5,29 @@ namespace RedirectAPI;
 
 internal static class Program
 {
-    private static WebApplicationBuilder? _builder;
-    public static WebApplication? App;
+    private static WebApplicationBuilder _builder = null!;
+    private static WebApplication _app = null!;
     private static void Main(string[] args)
     {
         _builder = WebApplication.CreateBuilder(args);
-        // Console.WriteLine(_builder.Configuration.GetConnectionString("RedirectDB"));
-
         _builder.Services.AddControllers();
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddSwaggerGen();
         _builder.Services.AddDbContext<ApplicationContext>(
             o => o.UseNpgsql(_builder.Configuration.GetConnectionString("RedirectDB")
             ));
-        App = _builder.Build();
+        _app = _builder.Build();
 
-        if (App.Environment.IsDevelopment())
+        if (_app.Environment.IsDevelopment())
         {
-            App.UseSwagger();
-            App.UseSwaggerUI();
+            _app.UseSwagger();
+            _app.UseSwaggerUI();
         }
-        
-        // Redirect.IsDev = App.Environment.IsDevelopment();
 
         // app.UseHttpsRedirection();
         // app.UseAuthorization();
-        App.MapControllers();
+        _app.MapControllers();
 
-        App.Run();
+        _app.Run();
     }
 }
