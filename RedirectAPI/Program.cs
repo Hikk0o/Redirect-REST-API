@@ -1,4 +1,7 @@
-using RedirectAPI;
+using Microsoft.EntityFrameworkCore;
+using RedirectAPI.Data;
+
+namespace RedirectAPI;
 
 internal static class Program
 {
@@ -7,11 +10,14 @@ internal static class Program
     private static void Main(string[] args)
     {
         _builder = WebApplication.CreateBuilder(args);
+        // Console.WriteLine(_builder.Configuration.GetConnectionString("RedirectDB"));
 
         _builder.Services.AddControllers();
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddSwaggerGen();
-
+        _builder.Services.AddDbContext<ApplicationContext>(
+            o => o.UseNpgsql(_builder.Configuration.GetConnectionString("RedirectDB")
+            ));
         App = _builder.Build();
 
         if (App.Environment.IsDevelopment())
@@ -19,6 +25,7 @@ internal static class Program
             App.UseSwagger();
             App.UseSwaggerUI();
         }
+        
         // Redirect.IsDev = App.Environment.IsDevelopment();
 
         // app.UseHttpsRedirection();

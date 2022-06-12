@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedirectAPI", "RedirectAPI\RedirectAPI.csproj", "{3793FD3F-C20E-4EA8-9B39-B0AE0767C82B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedirectAPI.Data", "RedirectAPI.Data\RedirectAPI.Data.csproj", "{75BD7011-D942-4E28-AD64-0C05DF1D4BAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3793FD3F-C20E-4EA8-9B39-B0AE0767C82B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3793FD3F-C20E-4EA8-9B39-B0AE0767C82B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3793FD3F-C20E-4EA8-9B39-B0AE0767C82B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3793FD3F-C20E-4EA8-9B39-B0AE0767C82B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75BD7011-D942-4E28-AD64-0C05DF1D4BAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75BD7011-D942-4E28-AD64-0C05DF1D4BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75BD7011-D942-4E28-AD64-0C05DF1D4BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75BD7011-D942-4E28-AD64-0C05DF1D4BAF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
