@@ -4,3 +4,5 @@
 /bin/
 /config.json
 /redirects.json
+/appsettings.json
+/appsettings.Development.json
