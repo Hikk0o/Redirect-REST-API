@@ -10,7 +10,7 @@ namespace RedirectAPI.Data;
 
     public override string ToString()
     {
-        return $"{Id}: {Ip}\n";
+        return $"{Id}: {Ip}";
     }
 }
 
