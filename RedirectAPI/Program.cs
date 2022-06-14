@@ -24,8 +24,8 @@ internal static class Program
             _app.UseSwaggerUI();
         }
 
-        // app.UseHttpsRedirection();
-        // app.UseAuthorization();
+        _app.UseHttpsRedirection();
+        _app.UseAuthorization();
         _app.MapControllers();
 
         _app.Run();

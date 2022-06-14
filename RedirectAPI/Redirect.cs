@@ -1,10 +1,11 @@
-﻿using RedirectAPI.Data;
+﻿using System.Text.RegularExpressions;
+using RedirectAPI.Data;
 
 namespace RedirectAPI;
 
 public static class Redirect
 {
-    // Получение длинной ссылки из короткой из базы данных (PostgreSQL)
+    // Получение длинной ссылки из базы данных, используя короткую ссылку (PostgreSQL)
     public static string GetUrl(ApplicationContext db, string shortUrl)
     {
         try
@@ -32,7 +33,7 @@ public static class Redirect
                 shortUrl = GenerateUrl();
             }
 
-            var link = new Link { UserId = user.Id, LongUrl = longUrl, ShortUrl = shortUrl };
+            var link = new Link { UserId = 1, LongUrl = longUrl, ShortUrl = shortUrl };
             db.Links.Add(link);
             db.SaveChanges();
             
@@ -43,6 +44,66 @@ public static class Redirect
             Console.WriteLine(e);
             return "ServerError";
         }
+    }
+    
+    // Получение изображения из базы данных, используя короткую ссылку (PostgreSQL)
+    public static string GetImg(ApplicationContext db, string shortUrl)
+    {
+        try
+        {
+            var image = db.Images.FirstOrDefault(img => img.ShortUrl == shortUrl);
+            return image == null ? "NotFound" : Convert.ToBase64String(image.Data);
+            // return image == null ? "NotFound" : image.Data;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return "ServerError";
+        }
+    }
+    
+    // Добавление изображения в базу данных (PostgreSQL)
+    public static string AddImg(ApplicationContext db, string data, User user)
+    {
+        data = Regex.Replace(data, @"^data:image\/png;base64,", "");
+        if (!IsBase64String(data)) return "WrongData";
+        try
+        {
+            var shortUrl = GenerateUrl();
+            
+            while (db.Links.FirstOrDefault(link => link.ShortUrl == shortUrl) != null)
+            {
+                shortUrl = GenerateUrl();
+            }
+
+            var bData = Convert.FromBase64String(data);
+            var image = new Image { UserId = 1, Data = bData, ShortUrl = shortUrl };
+            db.Images.Add(image);
+            db.SaveChanges();
+            
+            return shortUrl;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return "ServerError";
+        }
+    }
+
+    public static bool IsBase64String(this string base64String) {
+        // Credit: oybek https://stackoverflow.com/users/794764/oybek
+        if (string.IsNullOrEmpty(base64String) || base64String.Length % 4 != 0
+                                               || base64String.Contains(" ") || base64String.Contains("\t") || base64String.Contains("\r") || base64String.Contains("\n"))
+            return false;
+
+        try{
+            Convert.FromBase64String(base64String);
+            return true;
+        }
+        catch(Exception){
+            // catch
+        }
+        return false;
     }
 
     private static bool IsUrl(string url)
