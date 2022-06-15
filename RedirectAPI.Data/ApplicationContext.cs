@@ -13,8 +13,11 @@ public class ApplicationContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    public DbSet<User> Users { get; set; } = null!;
 
+    /// Database table
+    public DbSet<User> Users { get; set; } = null!;
+    /// Database table
     public DbSet<Link> Links { get; set; } = null!;
+    /// Database table
     public DbSet<Image> Images { get; set; } = null!;
 }

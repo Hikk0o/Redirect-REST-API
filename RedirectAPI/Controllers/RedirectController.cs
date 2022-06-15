@@ -33,16 +33,21 @@ public class RedirectController : ControllerBase
     public string PostUrl([FromBody, Required] string r)
     {
         var remoteIp = Request.HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString();
-        var user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp);
-        if (user != null) return RedirectAPI.Redirect.AddUrl(_db, r, user);
-        {
-            user = new User { Ip = remoteIp };
-            _db.Users.Add(user);
-            _db.SaveChanges();
-            user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp)!;
-            return RedirectAPI.Redirect.AddUrl(_db, r, user);
-        }
-    
+        
+        // Start TODO: Fix this (Remote IP is different every time, problem in cloudflare proxy)
+        var tempUser = _db.Users.FirstOrDefault(userDb => userDb.Id == 1);
+        return RedirectAPI.Redirect.AddUrl(_db, r, tempUser!);
+        
+        // var user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp);
+        // if (user != null) return RedirectAPI.Redirect.AddUrl(_db, r, user);
+        // {
+        //     user = new User { Ip = remoteIp };
+        //     _db.Users.Add(user);
+        //     _db.SaveChanges();
+        //     user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp)!;
+        //     return RedirectAPI.Redirect.AddUrl(_db, r, user);
+        // }
+        // End TODO;
         
     }
     
@@ -50,17 +55,21 @@ public class RedirectController : ControllerBase
     public string PostImg([FromBody, Required] string data)
     {
         var remoteIp = Request.HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString();
-        Console.WriteLine(remoteIp);
-        var user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp);
-        if (user != null) return RedirectAPI.Redirect.AddImg(_db, data, user);
-        {
-            Console.WriteLine("user null");
-            user = new User { Ip = remoteIp };
-            _db.Users.Add(user);
-            _db.SaveChanges();
-            user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp)!;
-            return RedirectAPI.Redirect.AddImg(_db, data, user);
-        }
+        
+        // Start TODO: Fix this (Remote IP is different every time, problem in cloudflare proxy)
+        var tempUser = _db.Users.FirstOrDefault(userDb => userDb.Id == 1);
+        return RedirectAPI.Redirect.AddImg(_db, data, tempUser!);
+        
+        // var user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp);
+        // if (user != null) return RedirectAPI.Redirect.AddImg(_db, data, user);
+        // {
+        //     user = new User { Ip = remoteIp };
+        //     _db.Users.Add(user);
+        //     _db.SaveChanges();
+        //     user = _db.Users.FirstOrDefault(userDb => userDb.Ip == remoteIp)!;
+        //     return RedirectAPI.Redirect.AddImg(_db, data, user);
+        // }
+        // End TODO;
     }
 
 }
