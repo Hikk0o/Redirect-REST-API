@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RedirectAPI.Data.DataEntity;
 
 namespace RedirectAPI.Data;
 

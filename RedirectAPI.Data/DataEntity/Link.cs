@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RedirectAPI.Data;
+namespace RedirectAPI.Data.DataEntity;
 
 /// Database Entity
 [Table("links")] public class Link
